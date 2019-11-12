@@ -22,7 +22,7 @@
     group: prometheus
     mode: 0755
 
-- name: create prometheus configuration directories
+- name: create prometheus directories
   file:
     path: "{{ item }}"
     state: directory
@@ -30,6 +30,8 @@
     group: prometheus
     mode: 0770
   with_items:
+    - "{{ prometheus_install_dir }}"
+    - "{{ prometheus_install_dir }}/bin"
     - "{{ prometheus_config_dir }}"
     - "{{ prometheus_config_dir }}/conf.d"
     - "{{ prometheus_config_dir }}/rules"
@@ -61,7 +63,7 @@
 - name: propagate prometheus and promtool binaries
   copy:
     src: "/tmp/prometheus-{{ prometheus_version }}.linux-{{ go_arch }}/{{ item }}"
-    dest: "/usr/local/bin/{{ item }}"
+    dest: "{{ prometheus_install_dir }}/bin/{{ item }}"
     mode: 0755
     owner: root
     group: root
